@@ -1,0 +1,12 @@
+├── src
+│   ├── controllers
+│   │   └── imageController.ts
+│   ├── middlewares
+│   │   └── imageResize.ts
+│   ├── models
+│   │   └── image.ts (not necessary for a stateless server)
+│   ├── routers
+│   │   └── newImage.ts
+│   └── services
+│       └── imageService.ts
+└── server.ts
