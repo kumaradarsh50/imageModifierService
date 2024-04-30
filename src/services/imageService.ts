@@ -26,11 +26,12 @@ async function newImage(image: Express.Multer.File, cropProperties: CropProperti
       cropProperties.x + cropProperties.width > imageMetadata.width ||
       cropProperties.y + cropProperties.height > imageMetadata.height
     ) {
-
-      throw new ImageProcessingError('Invalid image or crop area');
+      fs.unlink(path.join(`upload/${image.filename}`), () => { })
+      // throw new ImageProcessingError('Invalid image or crop area');
+      return next(new Error('Invalid image or crop area') as CustomeError)
     }
 
-    const temp = { x: 30, y: 17, width: 244, height: 244 }
+
     const processedImg = await sharp(imagePath)
       .extract({ left: cropProperties.x, top: cropProperties.y, width: cropProperties.width, height: cropProperties.height })
       .toBuffer();
@@ -44,15 +45,3 @@ async function newImage(image: Express.Multer.File, cropProperties: CropProperti
 }
 
 export { newImage as processImage }
-
-
-// sharp(imagePath)
-//       .extract({ left: temp.x, top: temp.y, width: temp.width, height: temp.height })
-//       .toFile(path.join('upload/' + 'modify' + image.filename), async (err, info) => {
-//         if (err) {
-//           return next(new ImageProcessingError('Error processing image: ' + err.message));
-//         } else {
-//           console.log(info)
-// fs.unlink(path.join(`upload/${image.filename}`), () => { })
-//         }
-//       })

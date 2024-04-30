@@ -4,7 +4,7 @@ import { handleImageUpload, handleMulterError, imageHeader, uploadImages } from 
 
 const router = Router()
 
-router.post('/api/image/new', uploadImages, imageHeader, handleImageUpload, handleMulterError
+router.post('/api/image/new', uploadImages, handleMulterError, imageHeader, handleImageUpload
 );
 
 export { router as newImageRouter }
