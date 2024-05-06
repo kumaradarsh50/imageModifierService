@@ -1,6 +1,8 @@
 ├── src
 │   ├── controllers
 │   │   └── imageController.ts
+├── errors
+│   │   └── bad-request-error.ts
 │   ├── middlewares
 │   │   └── imageResize.ts
 │   ├── models

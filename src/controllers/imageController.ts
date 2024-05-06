@@ -1,36 +1,36 @@
 import { Request, Response, NextFunction } from "express";
-import { CropProperties, processImage } from "../index";
+import { BadRequestError, CropProperties, processImage } from "../index";
 
 
 async function handleImageUpload(req: Request, res: Response, next: NextFunction) {
 
 
-
-  const { file, body } = req;
-  const parsedCropProperties = JSON.parse(body.cropProperties);
-
-
-  if (!file) {
-    return next(new Error('Image are required') as CustomeError)
-  }
-
-  // Check if crop properties exist in the request body
-  const cropPropertiesData: CropProperties = parsedCropProperties;
-  if (!cropPropertiesData) {
-    return next(new Error('Crop properties are required') as CustomeError);
-  }
-
-  // Validate crop properties fields
-  if (!isValidCropProperties(parsedCropProperties)) {
-    return next(new Error('Invalid crop properties') as CustomeError);
-  }
-
-
   try {
+    const { file, body } = req;
+    const parsedCropProperties = JSON.parse(body.cropProperties);
+
+
+    if (!file) {
+      return next(new BadRequestError('Image are required'))
+    }
+
+    // Check if crop properties exist in the request body
+    const cropPropertiesData: CropProperties = parsedCropProperties;
+    if (!cropPropertiesData) {
+      return next(new BadRequestError('Crop properties are required'));
+    }
+
+    // Validate crop properties fields
+    if (!isValidCropProperties(parsedCropProperties)) {
+      return next(new BadRequestError('Invalid crop properties'));
+    }
+
+
+
     const processImg = await processImage(file, cropPropertiesData, next)
     res.send(processImg);
   } catch (error) {
-    next(new Error('somthing went wrong') as CustomeError)
+    next(new Error('somthing went wrong'))
   }
 
 

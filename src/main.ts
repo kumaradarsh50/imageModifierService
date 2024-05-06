@@ -3,28 +3,19 @@ dotenv.config();
 
 import express, { NextFunction, Request, Response } from 'express'
 
-import { newImageRouter } from './index';
+import { BadRequestError, CustomeError, newImageRouter } from './index';
+import { errorHandler } from './index';
 
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json())
 
-declare global {
-  interface CustomeError extends Error {
-    status?: number
-  }
-}
 
-app.use((error: CustomeError, req: Request, res: Response, next:
-  NextFunction) => {
-  if (error.status) {
-    return res.status(error.status).json({ message: error.message })
-  }
-  res.status(500).json({ message: 'Something went wrong' })
-})
+
 
 app.use(newImageRouter);
+app.use(errorHandler)
 
 
 const start = async () => {

@@ -1,7 +1,7 @@
 import sharp from "sharp"
 import fs from 'fs';
 import path from 'path'
-import { CropProperties } from "../index"
+import { BadRequestError, CropProperties } from "../index"
 import { NextFunction } from "express";
 
 
@@ -27,8 +27,7 @@ async function newImage(image: Express.Multer.File, cropProperties: CropProperti
       cropProperties.y + cropProperties.height > imageMetadata.height
     ) {
       fs.unlink(path.join(`upload/${image.filename}`), () => { })
-      // throw new ImageProcessingError('Invalid image or crop area');
-      return next(new Error('Invalid image or crop area') as CustomeError)
+      return next(new BadRequestError('Invalid image or crop area'))
     }
 
 
